@@ -1,7 +1,8 @@
 package WeightedGraphs;
 
 
-import java.util.Comparator;
+
+import java.util.Arrays;
 import java.util.Objects;
 
 /** define a Vertex
@@ -10,32 +11,34 @@ import java.util.Objects;
  * **/
 class Vertex {
 
-    String label;
+    private int[] coordinates;
     int cost;
 
-    Vertex(String label, int cost) {
-        this.label = label;
+    // obstacles can be seen as vertices with cost infinity
+
+    Vertex(int[] coordinates, int cost) {
+        this.coordinates = coordinates;
         this.cost = cost;
     }
 
+    int[] getCoord() { return coordinates; }
+    int getX() { return coordinates[0]; }
+    int getY() { return coordinates[1]; }
+    int getCost() { return this.cost; }
+
+
     //equals and hashcode need to be overridden or 2 instances with same label will have a different hashcode thus being recognized as different
-
-    /*String getLabel() {
-        return this.label;
-    }
-    */
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;  // if this class instance is equals to the object (here vertex)
         if (o == null || getClass() != o.getClass()) return false;  // if null parameter or different classes
         Vertex vertex = (Vertex) o;  // convert the object to a vertex
-        return label.equals(vertex.label) && cost == vertex.cost;
+        return Arrays.equals(this.coordinates, vertex.coordinates) && cost == vertex.cost;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(label,cost);
+        return Objects.hash(coordinates,cost);
     }
 /*
     @Override

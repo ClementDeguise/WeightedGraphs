@@ -14,58 +14,95 @@ class Graph {
      * **/
 
     private Map<Vertex, List<Vertex>> neighbours;
+    private Map<int[],Integer> costMapping;
+
+    private int Height;
+    private int Width;
+
 
     // be sure to initialize neighbours with something
-    Graph() {
+    Graph(int H, int W) {
         neighbours = new HashMap<>();
+        costMapping = new HashMap<>();
+        Height = H;
+        Width = W;
     }
 
 
 
-    void addVertex(String label, int cost) {
+    void addVertex(int x, int y, int cost) {
+        int [] HVerif = new int[]{x,y};
         // If the specified key is not already associated with a value (or is mapped to null) associates it with the given value and returns null, else returns the current value.
-        List<Vertex> A = new ArrayList<>();
-       // A.add(new Vertex("b"));
-        //System.out.println(A.get(0).label);
-       // System.out.println(A.size());
-
-        neighbours.putIfAbsent(new Vertex(label,cost), A);
-
+        neighbours.putIfAbsent(new Vertex(HVerif,cost), new ArrayList<>());  //list of neighbours
+        costMapping.putIfAbsent(HVerif,cost);
+        //System.out.println(" | hashcode: " + Arrays.hashCode(HVerif));
+        System.out.println("node " + x + "," + y + " | cost: " + cost + " | hashcode: " + Arrays.hashCode(HVerif));
     }
 
-    void removeVertex(String label, int cost) {
-        Vertex v = new Vertex(label,cost);
+    void removeVertex(int x, int y, int cost) {
+        Vertex v = new Vertex(new int[]{x,y},cost);
         neighbours.values()
                 // parse all values
                 .stream()
-                // TODO define what happens
+                // remove the key
                 .map(e -> e.remove(v))
                 .collect(Collectors.toList());
-        neighbours.remove(new Vertex(label,cost));
+        neighbours.remove(new Vertex(new int[]{x,y},cost));  //remove the value
+        costMapping.remove(new int[]{x,y},cost);
     }
 
 
-    // method for adding an edge = neighbours to the vertex
-    void addNeighbours(String label1, String label2, int c1, int c2) {
-        Vertex v1 = new Vertex(label1,c1);
-        Vertex v2 = new Vertex(label2,c2);
+    private List<Vertex> setEntourage(int x, int y) {
+        List<Vertex> entourage = new ArrayList<>();
+        System.out.print("node " + x + "," + y + " has neighbours: ");
+        // for the square around
+        for (int i = x-1; i<= x+1; i++) {
+            for (int j = y-1; j<= y+1; j++) {
 
-        //System.out.println("2: " + v1.hashCode());
-        //System.out.println("3: " + v2.hashCode());
+                // remove OOB values and x,y value, a vertex is not neighbour of himself
+                if (i >= 0 && j >= 0 && i < Width && j < Height && i+j != x+y) {
+
+                    System.out.println(i + "," + j);
+                    int[] Hverif = new int[]{i,j};
+                    int[] Vverif = new int[]{0,2};
+                    System.out.println(Arrays.hashCode(Hverif));
+                    System.out.println(Arrays.hashCode(Vverif));
+                    System.out.println(Arrays.equals(Hverif,Vverif));
+
+                    int EntCost = costMapping.get(Hverif);
+                    entourage.add(new Vertex(new int[]{i,j},EntCost));
+                    System.out.print(i + "," + j);
+
+                }
+            }
+        }
+        return entourage;
+    }
 
 
-        //System.out.println(neighbours.containsKey(v1));
+    /* method for adding an edge = neighbours to the vertex.
+     * For 2D coordinates, the individual cost of each node is already define at graph creation, add neighbours
+     * simply list every neighbouring coordinates and get their cost, then map them as values into the hash map
+    */
+    void addNeighbours() {
 
+        Set<Vertex> set = neighbours.keySet();
 
-       // neighbours.get(v2).remove(B);
+        // another way of iterating in a Set or List
+        Iterator it = set.iterator();
+        while(it.hasNext()) {
+            Vertex nxt = (Vertex) it.next(); // iterator returns an object, need to instantiate it as Vertex
+            int x = nxt.getX();
+            int y = nxt.getY();
 
-        neighbours.get(v1).add(v2); // get v1 neighbours list, and add v2 to the list as its neighbour
-        neighbours.get(v2).add(v1); // do the opposite for v2
+            List<Vertex> Entourage = setEntourage(x,y);
+            Entourage.forEach(v -> neighbours.get(nxt).add(v));  //recreate the list
+        }
     }
 
 
     // method for removing edge
-    void removeNeighbours(String label1, String label2, int c1, int c2) {
+   /* void removeNeighbours(String label1, String label2, int c1, int c2) {
         Vertex v1 = new Vertex(label1,c1);
         Vertex v2 = new Vertex(label2,c2);
         List<Vertex> V1neighbours = neighbours.get(v1);  // get will return the value of the key, here the list
@@ -82,34 +119,26 @@ class Graph {
         Vertex v = new Vertex(label,cost);
         return neighbours.get(v);
 
-    }
+    }*/
+
+    int getCost(int x, int y) { return costMapping.get(new int[]{x,y}); }
+    int getSize() { return neighbours.size(); }
 
 
 
-
-    boolean getVertex(String label,int cost) {
+   /* boolean getVertex(String label,int cost) {
         return neighbours.containsKey(new Vertex(label,cost));
-    }
+    }*/
 
-    int getSize() {
-        return neighbours.size();
-    }
+
 
 
     void getElements() {
         Set<Vertex> S = neighbours.keySet();  // return a Set view of the keys contained in the map
 
-        //String[] V = S.toArray(new String[]);
-
         for (Vertex v : S) {
-            //List<Vertex> L = neighbours.get(v);
-            System.out.println("node " + v.label + " | cost: " + v.cost);
-            /*for (Vertex c : L) {
-                System.out.print(c.label + " ");
-            }
-            System.out.print("\n");*/
+            System.out.println("node " + v.getCoord()[0] + "," + v.getCoord()[1] + " | cost: " + v.cost);
         }
-
     }
 
 
@@ -121,7 +150,7 @@ class Graph {
      *
      * : a Set is an Unordered collection, while a List is an Ordered collection
      **/
-    Map<String,String> Dijkstra(Graph graph, String source, String goal, int costG) {
+   /* Map<String,String> Dijkstra(Graph graph, String source, String goal, int costG) {
 
         Map<String,String> cameFrom = new LinkedHashMap<>(); //each location we visited is linked to the previous one, effectively allowing us to find the path taken
         Map<String,Integer> costSoFar = new LinkedHashMap<>();
@@ -221,7 +250,7 @@ class Graph {
      *
      * : a Set is an Unordered collection, while a List is an Ordered collection
      **/
-    Map<String,String> Astar(Graph graph, String source, String goal, int costG) {
+   /* Map<String,String> Astar(Graph graph, String source, String goal, int costG) {
 
         Map<String,String> cameFrom = new LinkedHashMap<>(); //each location we visited is linked to the previous one, effectively allowing us to find the path taken
         Map<String,Integer> costSoFar = new LinkedHashMap<>();
@@ -284,7 +313,7 @@ class Graph {
 
     }
 
-
+*/
 
 
 
