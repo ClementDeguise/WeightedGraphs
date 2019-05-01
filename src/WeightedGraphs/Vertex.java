@@ -12,19 +12,20 @@ import java.util.Objects;
 class Vertex {
 
     private int[] coordinates;
-    int cost;
+    private Integer cost;
 
     // obstacles can be seen as vertices with cost infinity
 
-    Vertex(int[] coordinates, int cost) {
+    Vertex(int[] coordinates) {
         this.coordinates = coordinates;
-        this.cost = cost;
+
     }
 
     int[] getCoord() { return coordinates; }
     int getX() { return coordinates[0]; }
     int getY() { return coordinates[1]; }
-    int getCost() { return this.cost; }
+    Integer getCost() { return this.cost; }
+    void setCost(Integer cost) { this.cost = cost; }
 
 
     //equals and hashcode need to be overridden or 2 instances with same label will have a different hashcode thus being recognized as different
@@ -33,12 +34,12 @@ class Vertex {
         if (this == o) return true;  // if this class instance is equals to the object (here vertex)
         if (o == null || getClass() != o.getClass()) return false;  // if null parameter or different classes
         Vertex vertex = (Vertex) o;  // convert the object to a vertex
-        return Arrays.equals(this.coordinates, vertex.coordinates) && cost == vertex.cost;
+        return Arrays.equals(this.coordinates, vertex.coordinates); // && this.cost.equals(vertex.getCost());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(coordinates,cost);
+        return Objects.hash(coordinates[0],coordinates[1]);
     }
 /*
     @Override

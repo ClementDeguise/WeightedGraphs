@@ -14,7 +14,7 @@ class Graph {
      * **/
 
     private Map<Vertex, List<Vertex>> neighbours;
-    private Map<int[],Integer> costMapping;
+    private Map<Vertex,Integer> costMapping;
 
     private int Height;
     private int Width;
@@ -30,16 +30,18 @@ class Graph {
 
 
 
-    void addVertex(int x, int y, int cost) {
-        int [] HVerif = new int[]{x,y};
+    void addVertex(int x, int y, Integer cost) {
+        int [] coord = new int[]{x,y};
+        Vertex v = new Vertex(coord);
+        v.setCost(cost);
         // If the specified key is not already associated with a value (or is mapped to null) associates it with the given value and returns null, else returns the current value.
-        neighbours.putIfAbsent(new Vertex(HVerif,cost), new ArrayList<>());  //list of neighbours
-        costMapping.putIfAbsent(HVerif,cost);
+        neighbours.putIfAbsent(v, new ArrayList<>());  //list of neighbours
+        costMapping.putIfAbsent(v,cost);
         //System.out.println(" | hashcode: " + Arrays.hashCode(HVerif));
-        System.out.println("node " + x + "," + y + " | cost: " + cost + " | hashcode: " + Arrays.hashCode(HVerif));
+        System.out.println("node " + x + "," + y + " | cost: " + v.getCost() ); // + " | hashcode: " + Arrays.hashCode(HVerif));
     }
 
-    void removeVertex(int x, int y, int cost) {
+    /*void removeVertex(int x, int y, Integer cost) {
         Vertex v = new Vertex(new int[]{x,y},cost);
         neighbours.values()
                 // parse all values
@@ -49,7 +51,7 @@ class Graph {
                 .collect(Collectors.toList());
         neighbours.remove(new Vertex(new int[]{x,y},cost));  //remove the value
         costMapping.remove(new int[]{x,y},cost);
-    }
+    }*/
 
 
     private List<Vertex> setEntourage(int x, int y) {
@@ -62,20 +64,23 @@ class Graph {
                 // remove OOB values and x,y value, a vertex is not neighbour of himself
                 if (i >= 0 && j >= 0 && i < Width && j < Height && i+j != x+y) {
 
-                    System.out.println(i + "," + j);
-                    int[] Hverif = new int[]{i,j};
-                    int[] Vverif = new int[]{0,2};
-                    System.out.println(Arrays.hashCode(Hverif));
-                    System.out.println(Arrays.hashCode(Vverif));
-                    System.out.println(Arrays.equals(Hverif,Vverif));
+                    // System.out.println(i + "," + j);
+                    int[] H = new int[]{i,j};
+                    Vertex v = new Vertex(H);
+                   // System.out.println(Arrays.hashCode(Hverif));
+                   // System.out.println(Arrays.hashCode(Vverif));
+                   // System.out.println(Arrays.equals(Hverif,Vverif));
 
-                    int EntCost = costMapping.get(Hverif);
-                    entourage.add(new Vertex(new int[]{i,j},EntCost));
-                    System.out.print(i + "," + j);
+                    Integer EntCost = costMapping.get(v);
+                    v.setCost(EntCost);
+                    //System.out.println(;// lets note that primitive data type do not have problems with hash codes and equals
+                    entourage.add(v);
+                    System.out.print(" " + i + "," + j);
 
                 }
             }
         }
+        System.out.println("\n");
         return entourage;
     }
 
@@ -112,17 +117,28 @@ class Graph {
             V1neighbours.remove(v2);
         if (V2neighbours != null)
             V2neighbours.remove(v1);
+    }*/
+
+
+    private List<Vertex> getNeighbours(int[] coord) {
+        Vertex v = new Vertex(coord);
+        return neighbours.get(v);
+
+    }
+
+    Integer Cost(int x, int y) {
+        return costMapping.get(new Vertex(new int[]{x,y}));
     }
 
 
-    private List<Vertex> getNeighbours(String label,int cost) {
-        Vertex v = new Vertex(label,cost);
-        return neighbours.get(v);
-
-    }*/
-
-    int getCost(int x, int y) { return costMapping.get(new int[]{x,y}); }
     int getSize() { return neighbours.size(); }
+
+    void addCost(int x, int y, Integer cost) {
+        costMapping.put(new Vertex(new int[]{x,y}),cost);
+    }
+
+
+
 
 
 
@@ -137,7 +153,7 @@ class Graph {
         Set<Vertex> S = neighbours.keySet();  // return a Set view of the keys contained in the map
 
         for (Vertex v : S) {
-            System.out.println("node " + v.getCoord()[0] + "," + v.getCoord()[1] + " | cost: " + v.cost);
+            System.out.println("node " + v.getCoord()[0] + "," + v.getCoord()[1]);
         }
     }
 
@@ -150,26 +166,30 @@ class Graph {
      *
      * : a Set is an Unordered collection, while a List is an Ordered collection
      **/
-   /* Map<String,String> Dijkstra(Graph graph, String source, String goal, int costG) {
+    Map<int[],int[]> Dijkstra(Graph graph, int[] source, int[] goal) {
 
-        Map<String,String> cameFrom = new LinkedHashMap<>(); //each location we visited is linked to the previous one, effectively allowing us to find the path taken
-        Map<String,Integer> costSoFar = new LinkedHashMap<>();
+        Map<int[],int[]> cameFrom = new LinkedHashMap<>(); //each location we visited is linked to the previous one, effectively allowing us to find the path taken
+        Map<int[],Integer> costSoFar = new LinkedHashMap<>();
 
 
         // the frontier, current visiting vertices
         // we must use it on vertices as direct comparison on strings only works for 1 digit labels
-        PriorityQueue<Vertex> queue = new PriorityQueue<>(15,new VertexComparator());
+        PriorityQueue<Vertex> queue = new PriorityQueue<>(15,new CostComparator());
 
 
-        Vertex Source = new Vertex(source,0);
-        Vertex Goal = new Vertex(goal, costG);
+        Vertex Source = new Vertex(source);
+        Vertex Goal = new Vertex(goal);
 
+        Integer costG = Cost(Goal.getX(),Goal.getY());
+        Integer costS = Cost(Source.getX(),Source.getY());
+        Source.setCost(costS);
+        Goal.setCost(costG);
 
         //System.out.println(cameFrom.size());
 
         // initialization, cost 0 for the source
         queue.add(Source);
-        cameFrom.put(source,null); //the source doesn't have any parents
+        cameFrom.put(Source.getCoord(),null); //the source doesn't have any parents
         costSoFar.put(source,0);
 
 
@@ -193,18 +213,18 @@ class Graph {
 
 
             // for each neighbour of the retrieved vertex
-            for (Vertex v : graph.getNeighbours(topVertex.label,topVertex.cost)) {
+            for (Vertex v : graph.getNeighbours(topVertex.getCoord())) {
 
-                int newCost = costSoFar.get(topVertex.label) + v.cost;            // add cost of current vertex and cost of
+                int newCost = costSoFar.get(topVertex.getCoord()) + v.getCost();            // add cost of current vertex and cost of
 
                 // for the first neighbour, since we have nothing to compare with, we add it to the cost so far provided we didn't previously visit it
                 // then each neighbour new cost will be compared and replaced if inferior, until the least costly neighbour has been found
-                if (!costSoFar.containsKey(v.label) || newCost < costSoFar.get(v.label)) {
-                    costSoFar.put(v.label,newCost);
+                if (!costSoFar.containsKey(v.getCoord()) || newCost < costSoFar.get(v.getCoord())) {
+                    costSoFar.put(v.getCoord(),newCost);
 
-                    cameFrom.put(v.label,topVertex.label);  // add it to the visited list
+                    cameFrom.put(v.getCoord(),topVertex.getCoord());  // add it to the visited list
                     //System.out.println("adding child "+ v.label + " to parent " + topVertex.label );
-                    queue.add(new Vertex(v.label,v.cost)); // add it to the queue as the new frontier, since the frontier expanded
+                    queue.add(new Vertex(v.getCoord())); // add it to the queue as the new frontier, since the frontier expanded
                     // the vertex with lower cost naturally as higher priority
                 }
             }
@@ -216,12 +236,22 @@ class Graph {
 
 
 
-    List<String> Path_reconstruct(Map<String,String> cameFrom, String source, String goal) {
+    List<int[]> Path_reconstruct(Map<int[],int[]> cameFrom, int[] source, int[] goal) {
 
-        List<String> path = new ArrayList<>();  //initiate the path
-        String current = goal; // start from the goal and navigate the map
+        List<int[]> path = new ArrayList<>();  //initiate the path
+        Vertex Source = new Vertex(source);
+        Vertex Goal = new Vertex(goal);
 
-        while (!current.equals(source)) {  // while we haven't reach the source
+        /*Integer costG = Cost(Goal.getX(),Goal.getY());
+        Integer costS = Cost(Source.getX(),Source.getY());
+        Source.setCost(costS);
+        Goal.setCost(costG);*/
+
+
+
+        int[] current = goal; // start from the goal and navigate the map
+
+        while (!Arrays.equals(current,source)) {  // while we haven't reach the source
             path.add(current);  // add to path
             current = cameFrom.get(current);  //get the parent in the map
         }
@@ -258,7 +288,7 @@ class Graph {
 
         // the frontier, current visiting vertices
         // we must use it on vertices as direct comparison on strings only works for 1 digit labels
-        PriorityQueue<Vertex> queue = new PriorityQueue<>(15,new VertexComparator());
+        PriorityQueue<Vertex> queue = new PriorityQueue<>(15,new CostComparator());
 
 
         Vertex Source = new Vertex(source,0);

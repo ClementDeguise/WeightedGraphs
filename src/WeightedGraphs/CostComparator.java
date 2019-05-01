@@ -2,7 +2,7 @@ package WeightedGraphs;
 
 import java.util.Comparator;
 
-public class VertexComparator implements Comparator<Vertex> {
+public class CostComparator implements Comparator<Vertex> {
 
     @Override
     public int compare(Vertex v1, Vertex v2)
