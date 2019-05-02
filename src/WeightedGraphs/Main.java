@@ -92,7 +92,7 @@ public class Main {
             System.out.print(s + " ");
         }*/
 
-        Map<int[],int[]> cameFrom = testGraph.Dijkstra(testGraph,new int[]{0,0},new int[]{2,2});
+        Map<Vertex,Vertex> cameFrom = testGraph.Dijkstra(testGraph,new int[]{0,0},new int[]{2,2});
 
         List<int[]> path = testGraph.Path_reconstruct(cameFrom,new int[]{0,0},new int[]{2,2});
 

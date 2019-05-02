@@ -62,7 +62,7 @@ class Graph {
             for (int j = y-1; j<= y+1; j++) {
 
                 // remove OOB values and x,y value, a vertex is not neighbour of himself
-                if (i >= 0 && j >= 0 && i < Width && j < Height && i+j != x+y) {
+                if (i >= 0 && j >= 0 && i < Width && j < Height && (i != x && j != y)) {
 
                     // System.out.println(i + "," + j);
                     int[] H = new int[]{i,j};
@@ -166,10 +166,10 @@ class Graph {
      *
      * : a Set is an Unordered collection, while a List is an Ordered collection
      **/
-    Map<int[],int[]> Dijkstra(Graph graph, int[] source, int[] goal) {
+    Map<Vertex,Vertex> Dijkstra(Graph graph, int[] source, int[] goal) {
 
-        Map<int[],int[]> cameFrom = new LinkedHashMap<>(); //each location we visited is linked to the previous one, effectively allowing us to find the path taken
-        Map<int[],Integer> costSoFar = new LinkedHashMap<>();
+        Map<Vertex,Vertex> cameFrom = new LinkedHashMap<>(); //each location we visited is linked to the previous one, effectively allowing us to find the path taken
+        Map<Vertex,Integer> costSoFar = new LinkedHashMap<>();
 
 
         // the frontier, current visiting vertices
@@ -189,8 +189,8 @@ class Graph {
 
         // initialization, cost 0 for the source
         queue.add(Source);
-        cameFrom.put(Source.getCoord(),null); //the source doesn't have any parents
-        costSoFar.put(source,0);
+        cameFrom.put(Source,null); //the source doesn't have any parents
+        costSoFar.put(Source,0);
 
 
 
@@ -215,16 +215,20 @@ class Graph {
             // for each neighbour of the retrieved vertex
             for (Vertex v : graph.getNeighbours(topVertex.getCoord())) {
 
-                int newCost = costSoFar.get(topVertex.getCoord()) + v.getCost();            // add cost of current vertex and cost of
+                int newCost = costSoFar.get(topVertex) + v.getCost();            // add cost of current vertex and cost of
 
                 // for the first neighbour, since we have nothing to compare with, we add it to the cost so far provided we didn't previously visit it
                 // then each neighbour new cost will be compared and replaced if inferior, until the least costly neighbour has been found
-                if (!costSoFar.containsKey(v.getCoord()) || newCost < costSoFar.get(v.getCoord())) {
-                    costSoFar.put(v.getCoord(),newCost);
+                if (!costSoFar.containsKey(v) || newCost < costSoFar.get(v)) {
+                    costSoFar.put(v,newCost);
+                    Integer CC = Cost(v.getX(),v.getY());
+                    v.setCost(CC);
 
-                    cameFrom.put(v.getCoord(),topVertex.getCoord());  // add it to the visited list
+                    cameFrom.put(v,topVertex);  // add it to the visited list
+
+
                     //System.out.println("adding child "+ v.label + " to parent " + topVertex.label );
-                    queue.add(new Vertex(v.getCoord())); // add it to the queue as the new frontier, since the frontier expanded
+                    queue.add(v); // add it to the queue as the new frontier, since the frontier expanded
                     // the vertex with lower cost naturally as higher priority
                 }
             }
@@ -236,7 +240,7 @@ class Graph {
 
 
 
-    List<int[]> Path_reconstruct(Map<int[],int[]> cameFrom, int[] source, int[] goal) {
+    List<int[]> Path_reconstruct(Map<Vertex,Vertex> cameFrom, int[] source, int[] goal) {
 
         List<int[]> path = new ArrayList<>();  //initiate the path
         Vertex Source = new Vertex(source);
@@ -249,11 +253,13 @@ class Graph {
 
 
 
-        int[] current = goal; // start from the goal and navigate the map
+        Vertex current = Goal; // start from the goal and navigate the map
 
-        while (!Arrays.equals(current,source)) {  // while we haven't reach the source
-            path.add(current);  // add to path
+        while (!current.equals(Source)) {  // while we haven't reach the source
+            path.add(current.getCoord());  // add to path
+            System.out.print("current "+ current.getCoord()[0] + " " + current.getCoord()[1] + " coming from " );
             current = cameFrom.get(current);  //get the parent in the map
+            System.out.print(current.getCoord()[0] + " " + current.getCoord()[1] + "\n" );
         }
 
         path.add(source); // add the source for completion
