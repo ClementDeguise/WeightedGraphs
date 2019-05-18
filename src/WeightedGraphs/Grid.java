@@ -1,12 +1,57 @@
 package WeightedGraphs;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class Main {
+public class Grid {
+
+
+
+    public Grid() {
+        EventQueue.invokeLater(new Runnable() {
+               @Override
+               public void run() {
+
+                   // TODO : look and feel manager ?
+                   try {
+                       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                   }
+                   catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+                       ex.printStackTrace();
+                   }
+
+                   JFrame frame = new JFrame("Grid");
+                   frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                   frame.add(new TestPane());
+                   frame.pack();
+                   frame.setLocationRelativeTo(null);
+                   frame.setVisible(true);
+
+
+               }
+           });
+    }
+
+
+
+
+
+
+
+
 
     public static void main(String[] args) {
+
+        new Grid();
+
+
+
+
+
+
 
         int H = 4;
         int W = 4;
@@ -18,7 +63,7 @@ public class Main {
             for (int j = 0; j < W-1; j++) {
                 testGraph.addVertex(i,j,1);
             }
-        }*/
+        }
         testGraph.addVertex(0,0,0);
         testGraph.addVertex(0,1,3);
         testGraph.addVertex(0,2,1);
@@ -42,7 +87,7 @@ public class Main {
         int[] j = new int[]{1,1};
         System.out.println(Arrays.hashCode(i));
         System.out.println(Arrays.hashCode(j));
-        System.out.println(Arrays.equals(i,j));*/
+        System.out.println(Arrays.equals(i,j));
 
         //testGraph.getElements();
 
@@ -50,9 +95,9 @@ public class Main {
         //Integer c = testGraph.Cost(2,2);
         //System.out.println("2,2 cost: " + c);
 
-        /*Vertex v = new Vertex(new int[] {2,2},1);
+        Vertex v = new Vertex(new int[] {2,2},1);
         System.out.println(v.getCost().hashCode() );
-        System.out.println(v.getCost().hashCode() );*/
+        System.out.println(v.getCost().hashCode() );
 
         //int[] x = new int[]{1,1};
         //int[] y = new int[]{1,1};
@@ -72,7 +117,7 @@ public class Main {
 
         //testGraph.addCost(y,1);
         c = testGraph.Cost(1,1);
-        System.out.println(c);*/
+        System.out.println(c);
 
 
         testGraph.addNeighbours();
@@ -90,7 +135,7 @@ public class Main {
 
         for (String s : visitedNaive) {
             System.out.print(s + " ");
-        }*/
+        }
 
         Map<Vertex,Vertex> cameFrom = testGraph.Dijkstra(testGraph,new int[]{0,0},new int[]{2,2});
 
@@ -98,7 +143,7 @@ public class Main {
 
         //System.out.print();
 
-        for (int[]s : path) { System.out.print(Arrays.toString(s) + " "); }
+        for (int[]s : path) { System.out.print(Arrays.toString(s) + " "); }*/
 
 
 

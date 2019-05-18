@@ -21,11 +21,13 @@ class Vertex {
 
     }
 
+
     int[] getCoord() { return coordinates; }
     int getX() { return coordinates[0]; }
     int getY() { return coordinates[1]; }
     Integer getCost() { return this.cost; }
     void setCost(Integer cost) { this.cost = cost; }
+
 
 
     //equals and hashcode need to be overridden or 2 instances with same label will have a different hashcode thus being recognized as different
@@ -41,6 +43,8 @@ class Vertex {
     public int hashCode() {
         return Objects.hash(coordinates[0],coordinates[1]);
     }
+
+
 /*
     @Override
     boolean equals(Vertex v) {
