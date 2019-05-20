@@ -12,7 +12,7 @@ import java.util.Objects;
 class Vertex {
 
     private int[] coordinates;
-    private Integer cost;
+    private Integer cost = 1;
 
     // obstacles can be seen as vertices with cost infinity
 

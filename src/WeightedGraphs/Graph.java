@@ -3,6 +3,7 @@ package WeightedGraphs;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 class Graph {
 
     /** define a Graph using adjency list: each element of the vertex list contains a list of neighbouring vertices
@@ -15,6 +16,8 @@ class Graph {
 
     private Map<Vertex, List<Vertex>> neighbours;
     private Map<Vertex,Integer> costMapping;
+    private Map<Vertex, Vertex> cameFrom = new LinkedHashMap<>();
+
 
     private int Height;
     private int Width;
@@ -26,6 +29,7 @@ class Graph {
         costMapping = new HashMap<>();
         Height = H;
         Width = W;
+
     }
 
 
@@ -33,7 +37,7 @@ class Graph {
     void addVertex(int x, int y, Integer cost) {
         int [] coord = new int[]{x,y};
         Vertex v = new Vertex(coord);
-        v.setCost(cost);
+        //v.setCost(cost);
         // If the specified key is not already associated with a value (or is mapped to null) associates it with the given value and returns null, else returns the current value.
         neighbours.putIfAbsent(v, new ArrayList<>());  //list of neighbours
         costMapping.putIfAbsent(v,cost);
@@ -62,7 +66,7 @@ class Graph {
             for (int j = y-1; j<= y+1; j++) {
 
                 // remove OOB values and x,y value, a vertex is not neighbour of himself
-                if (i >= 0 && j >= 0 && i < Width && j < Height && (i != x && j != y)) {
+                if (i >= 0 && j >= 0 && i < Width && j < Height && !Arrays.equals(new int[]{i,j}, new int[]{x,y})) {
 
                     // System.out.println(i + "," + j);
                     int[] H = new int[]{i,j};
@@ -72,7 +76,7 @@ class Graph {
                    // System.out.println(Arrays.equals(Hverif,Vverif));
 
                     Integer EntCost = costMapping.get(v);
-                    v.setCost(EntCost);
+                    //v.setCost(EntCost);
                     //System.out.println(;// lets note that primitive data type do not have problems with hash codes and equals
                     entourage.add(v);
                     System.out.print(" " + i + "," + j);
@@ -120,7 +124,7 @@ class Graph {
     }*/
 
 
-    private List<Vertex> getNeighbours(int[] coord) {
+    List<Vertex> getNeighbours(int[] coord) {
         Vertex v = new Vertex(coord);
         return neighbours.get(v);
 
@@ -137,8 +141,13 @@ class Graph {
         costMapping.put(new Vertex(new int[]{x,y}),cost);
     }
 
+    Map<Vertex,Integer> getCostMapping() {
+        return costMapping;
+    }
 
-
+    Map<Vertex,Vertex> getCameFrom() {
+        return cameFrom;
+    }
 
 
 
@@ -158,127 +167,94 @@ class Graph {
     }
 
 
-    /**--------------- Dijkstra's algorithm, LOWER COST --------------
+
+
+
+
+
+    /**
+     * --------------- Dijkstra algorithm, LOWER COST --------------
      *
      * cost account for the distance between each nodes, or steepness, or terrain, etc
      *
      *
      *
      * : a Set is an Unordered collection, while a List is an Ordered collection
-     **/
-    Map<Vertex,Vertex> Dijkstra(Graph graph, int[] source, int[] goal) {
+     *
 
-        Map<Vertex,Vertex> cameFrom = new LinkedHashMap<>(); //each location we visited is linked to the previous one, effectively allowing us to find the path taken
-        Map<Vertex,Integer> costSoFar = new LinkedHashMap<>();
+     // TODO call a repaint, every time the cameFrom list update
 
+    void Dijkstra(Graph graph, int[] source, int[] goal) {
 
-        // the frontier, current visiting vertices
-        // we must use it on vertices as direct comparison on strings only works for 1 digit labels
-        PriorityQueue<Vertex> queue = new PriorityQueue<>(15,new CostComparator());
+        // Map<Vertex, Vertex> cameFrom = new LinkedHashMap<>(); //each location we visited is linked to the previous one, effectively allowing us to find the path taken
+         Map<Vertex, Integer> costSoFar = new LinkedHashMap<>();
 
 
-        Vertex Source = new Vertex(source);
-        Vertex Goal = new Vertex(goal);
-
-        Integer costG = Cost(Goal.getX(),Goal.getY());
-        Integer costS = Cost(Source.getX(),Source.getY());
-        Source.setCost(costS);
-        Goal.setCost(costG);
-
-        //System.out.println(cameFrom.size());
-
-        // initialization, cost 0 for the source
-        queue.add(Source);
-        cameFrom.put(Source,null); //the source doesn't have any parents
-        costSoFar.put(Source,0);
+         // the frontier, current visiting vertices
+         // we must use it on vertices as direct comparison on strings only works for 1 digit labels
+         PriorityQueue<Vertex> queue = new PriorityQueue<>(15, new CostComparator());
 
 
+         Vertex Source = new Vertex(source);
+         Vertex Goal = new Vertex(goal);
+
+         Integer costG = Cost(Goal.getX(), Goal.getY());
+         Integer costS = Cost(Source.getX(), Source.getY());
+         Source.setCost(costS);
+         Goal.setCost(costG);
+
+         //System.out.println(cameFrom.size());
+
+         // initialization, cost 0 for the source
+         queue.add(Source);
+         cameFrom.put(Source, null); //the source doesn't have any parents
+         costSoFar.put(Source, 0);
 
 
+         // while there's still nodes to explore
+         while (!queue.isEmpty()) {
 
-        // while there's still nodes to explore
-        while (!queue.isEmpty()) {
+             Vertex topVertex = queue.poll(); // retrieve and remove the head of the queue
 
-            Vertex topVertex = queue.poll(); // retrieve and remove the head of the queue
+             //early exit, no need to keep going if we reached the goal
+             if (topVertex.equals(Goal)) break;
 
-            //early exit, no need to keep going if we reached the goal
-            if(topVertex.equals(Goal)) break;
+             //System.out.println(topVertex.label + " cost " + topVertex.cost);
+             //System.out.println("hashcode : " + topVertex.hashCode());
+             //System.out.println("is in graph : " + graph.getVertex(topVertex.label,topVertex.cost));
+             List<Vertex> ng = graph.getNeighbours(topVertex.getCoord());
 
-            //System.out.println(topVertex.label + " cost " + topVertex.cost);
-            //System.out.println("hashcode : " + topVertex.hashCode());
-            //System.out.println("is in graph : " + graph.getVertex(topVertex.label,topVertex.cost));
+             // for each neighbour of the retrieved vertex
+             for (Vertex v : graph.getNeighbours(topVertex.getCoord())) {
 
+                 int newCost = costSoFar.get(topVertex) + costMapping.get(v);            // add cost of current vertex and cost of
 
+                 // for the first neighbour, since we have nothing to compare with, we add it to the cost so far provided we didn't previously visit it
+                 // then each neighbour new cost will be compared and replaced if inferior, until the least costly neighbour has been found
+                 if (!costSoFar.containsKey(v) || newCost < costSoFar.get(v)) {
+                     costSoFar.put(v, newCost);
 
+                     v.setCost(newCost);
 
+                     // put erases the previous value
+                     cameFrom.put(v, topVertex);  // add it to the visited list
 
-            // for each neighbour of the retrieved vertex
-            for (Vertex v : graph.getNeighbours(topVertex.getCoord())) {
+                     testPane.repaint();
+                     //System.out.println("adding child "+ v.label + " to parent " + topVertex.label );
+                     queue.add(v); // add it to the queue as the new frontier, since the frontier expanded
+                     // the vertex with lower cost naturally as higher priority
+                 }
+             }
+         }
 
-                int newCost = costSoFar.get(topVertex) + v.getCost();            // add cost of current vertex and cost of
-
-                // for the first neighbour, since we have nothing to compare with, we add it to the cost so far provided we didn't previously visit it
-                // then each neighbour new cost will be compared and replaced if inferior, until the least costly neighbour has been found
-                if (!costSoFar.containsKey(v) || newCost < costSoFar.get(v)) {
-                    costSoFar.put(v,newCost);
-                    Integer CC = Cost(v.getX(),v.getY());
-                    v.setCost(CC);
-
-                    cameFrom.put(v,topVertex);  // add it to the visited list
-
-
-                    //System.out.println("adding child "+ v.label + " to parent " + topVertex.label );
-                    queue.add(v); // add it to the queue as the new frontier, since the frontier expanded
-                    // the vertex with lower cost naturally as higher priority
-                }
-            }
-        }
-        return cameFrom;  // we can do something with visited, for pathfinding and path memory
-
-    }
-
-
-
-
-    List<int[]> Path_reconstruct(Map<Vertex,Vertex> cameFrom, int[] source, int[] goal) {
-
-        List<int[]> path = new ArrayList<>();  //initiate the path
-        Vertex Source = new Vertex(source);
-        Vertex Goal = new Vertex(goal);
-
-        /*Integer costG = Cost(Goal.getX(),Goal.getY());
-        Integer costS = Cost(Source.getX(),Source.getY());
-        Source.setCost(costS);
-        Goal.setCost(costG);*/
-
-
-
-        Vertex current = Goal; // start from the goal and navigate the map
-
-        while (!current.equals(Source)) {  // while we haven't reach the source
-            path.add(current.getCoord());  // add to path
-            System.out.print("current "+ current.getCoord()[0] + " " + current.getCoord()[1] + " coming from " );
-            current = cameFrom.get(current);  //get the parent in the map
-            System.out.print(current.getCoord()[0] + " " + current.getCoord()[1] + "\n" );
-        }
-
-        path.add(source); // add the source for completion
-        Collections.reverse(path);
-        return path;
-
-    }
+     }
 
 
 
 
 
 
-
-
-
-
-
-    /**--------------- A* --------------
+     /**--------------- A* --------------
      *
      * cost account for the distance between each nodes, or steepness, or terrain, etc
      *
@@ -350,37 +326,6 @@ class Graph {
     }
 
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
