@@ -58,32 +58,36 @@ class Graph {
     }*/
 
 
+    // careful, we want to add linear neighbours, and not neighbours in diagonal
     private List<Vertex> setEntourage(int x, int y) {
         List<Vertex> entourage = new ArrayList<>();
         System.out.print("node " + x + "," + y + " has neighbours: ");
         // for the square around
-        for (int i = x-1; i<= x+1; i++) {
-            for (int j = y-1; j<= y+1; j++) {
 
-                // remove OOB values and x,y value, a vertex is not neighbour of himself
-                if (i >= 0 && j >= 0 && i < Width && j < Height && !Arrays.equals(new int[]{i,j}, new int[]{x,y})) {
 
-                    // System.out.println(i + "," + j);
-                    int[] H = new int[]{i,j};
-                    Vertex v = new Vertex(H);
-                   // System.out.println(Arrays.hashCode(Hverif));
-                   // System.out.println(Arrays.hashCode(Vverif));
-                   // System.out.println(Arrays.equals(Hverif,Vverif));
+        // remove OOB values and x,y value, a vertex is not neighbour of himself
 
-                    Integer EntCost = costMapping.get(v);
-                    //v.setCost(EntCost);
-                    //System.out.println(;// lets note that primitive data type do not have problems with hash codes and equals
-                    entourage.add(v);
-                    System.out.print(" " + i + "," + j);
-
-                }
-            }
+        if (x >= 1) {
+            entourage.add(new Vertex(new int[]{x-1, y}));
+            System.out.print(" " + (x-1) + "," + y);
         }
+        if (y >= 1) {
+            entourage.add(new Vertex(new int[]{x, y-1}));
+            System.out.print(" " + x + "," + (y-1));
+        }
+        if (x < Width-1) {
+            entourage.add(new Vertex(new int[]{x+1, y}));
+            System.out.print(" " + (x+1) + "," + y);
+        }
+        if (y < Height-1) {
+            entourage.add(new Vertex(new int[]{x, y+1}));
+            System.out.print(" " + x + "," + (y+1));
+        }
+
+        //System.out.println(;// lets note that primitive data type do not have problems with hash codes and equals
+
+
+
         System.out.println("\n");
         return entourage;
     }

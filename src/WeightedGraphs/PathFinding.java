@@ -9,21 +9,21 @@ import java.util.*;
 public class PathFinding {
 
 
-
     private Map<Vertex,Vertex> cameFrom;
+    private Map<Vertex,Integer> costMapping;
+
+    private Graph graph;
 
 
 
-    PathFinding(Map<Vertex,Vertex> cameFrom) {
-        this.cameFrom = cameFrom;
+    PathFinding(Graph graph) {
+        this.graph = graph;
+        cameFrom = graph.getCameFrom();
+        costMapping = graph.getCostMapping();
 
     }
 
 
-
-    Map<Vertex,Vertex> getNewCameFrom() {
-        return cameFrom;
-    }
 
 
     List<int[]> Path_reconstruct(int[] source, int[] goal) {
@@ -76,7 +76,7 @@ public class PathFinding {
 
     // TODO call a repaint, every time the cameFrom list update
 
-     public void Dijkstra(Graph graph, int[] source, int[] goal) {
+     void Dijkstra(int[] source, int[] goal) {
 
        // Map<Vertex, Vertex> cameFrom = new LinkedHashMap<>(); //each location we visited is linked to the previous one, effectively allowing us to find the path taken
         Map<Vertex, Integer> costSoFar = new LinkedHashMap<>();
@@ -119,7 +119,7 @@ public class PathFinding {
             // for each neighbour of the retrieved vertex
             for (Vertex v : graph.getNeighbours(topVertex.getCoord())) {
 
-                int newCost = costSoFar.get(topVertex) + v.getCost();            // add cost of current vertex and cost of
+                int newCost = costSoFar.get(topVertex) + costMapping.get(v);            // add cost of current vertex and cost of
 
                 // for the first neighbour, since we have nothing to compare with, we add it to the cost so far provided we didn't previously visit it
                 // then each neighbour new cost will be compared and replaced if inferior, until the least costly neighbour has been found
@@ -130,7 +130,7 @@ public class PathFinding {
 
                     cameFrom.put(v, topVertex);  // add it to the visited list
 
-
+                    drawGraph();
                     //System.out.println("adding child "+ v.label + " to parent " + topVertex.label );
                     queue.add(v); // add it to the queue as the new frontier, since the frontier expanded
                     // the vertex with lower cost naturally as higher priority
@@ -140,6 +140,35 @@ public class PathFinding {
 
 
     }
+
+
+
+    private void drawGraph() {
+
+         for (int i=0; i<10; i++) {
+             for (int j=0; j<10; j++) {
+
+                 if (cameFrom.containsKey(new Vertex(new int[]{i,j}))) {
+                     System.out.print(" 1 ");
+                 }
+                 else System.out.print(" 0 ");
+
+             }
+             System.out.print("\n");
+         }
+
+
+        System.out.println(" ");
+    }
+
+
+
+
+
+
+
+
+
 
 
 

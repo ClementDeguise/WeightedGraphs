@@ -1,6 +1,7 @@
 package WeightedGraphs;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Map;
 import javax.swing.*;
 import java.util.List;
@@ -10,15 +11,13 @@ public class TestPane extends JPanel {
 
     private int gridSize;
     private Map<Vertex,Integer> costMapping;
-    private Map<Vertex,Vertex> cameFrom;
-    private Timer timer;
     private List<int[]> path;
 
 
-    TestPane(int gridSize, Map<Vertex,Integer> costMapping, Map<Vertex,Vertex> cameFrom, List<int[]> path) {
+    TestPane(int gridSize, Map<Vertex,Integer> costMapping, List<int[]> path) {
         this.gridSize = gridSize;
         this.costMapping = costMapping;
-        this.cameFrom = cameFrom;
+
         this.path = path;
 
     }
@@ -73,17 +72,26 @@ public class TestPane extends JPanel {
 
                     int[] v = new int[]{horz,vert};
 
+
+                    for (int[] i : path) {
+                        if (Arrays.equals(i,v)) {
+                            //g.drawRect(x+size/4,y+size/4,size/2,size/2);
+                            // g.fillRect(x+size/4,y+size/4,size/2,size/2);
+                            //Rectangle rectangle = new Rectangle(x + size / 4, y + size / 4, size / 2, size / 2);
+
+                            g.setColor(Color.GREEN);
+                            g.fillRect(x+1,y+1,size-1,size-1);
+                            g.setColor(Color.BLACK);
+
+
+
+                        }
+                    }
+
+
                     String cost = Integer.toString(costMapping.get(new Vertex(v)));
                     // draw cost value inside
                     g.drawString(cost, x+size/2,y+size/2);
-
-
-                    if (path.contains(v)) {
-                        g.setColor(Color.RED);
-                        g.drawRect(x+size/4,y+size/4,size/2,size/2);
-
-                    }
-
 
 
                 } catch (NullPointerException e) {
@@ -96,6 +104,15 @@ public class TestPane extends JPanel {
         }
         g2d.dispose();
     }
+
+
+
+
+
+
+
+
+
 
 
 

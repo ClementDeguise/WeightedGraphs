@@ -20,7 +20,7 @@ public class PathFindingGenerator {
         int width = 10;
 
 
-        // generate graph
+        // Graph structure with neighbours
         Graph testGraph = new Graph(height,width);
 
         for (int i = 0; i < height; i++) {
@@ -28,18 +28,40 @@ public class PathFindingGenerator {
                 testGraph.addVertex(i,j,1);
             }
         }
+
         testGraph.addNeighbours();
 
 
+        // change some costs
+        testGraph.addCost(3,3,30);
+        testGraph.addCost(3,4,30);
+        testGraph.addCost(3,5,30);
+        testGraph.addCost(3,6,30);
+        testGraph.addCost(4,3,30);
+        testGraph.addCost(4,4,30);
+        testGraph.addCost(4,6,30);
+        testGraph.addCost(5,3,30);
+        testGraph.addCost(6,3,30);
 
 
 
-        PathFinding pf = new PathFinding(testGraph.getCameFrom());
-        pf.Dijkstra(testGraph,new int[]{0,0},new int[]{4,9});
-        List<int[]> path = pf.Path_reconstruct(new int[]{0,0},new int[]{2,2});
+        // --------------------------------
 
 
-        TestPane testPane = new TestPane(height, testGraph.getCostMapping(),testGraph.getCameFrom(),path);
+
+        // pass the graph to the algo
+        PathFinding pf = new PathFinding(testGraph);
+
+        //algo
+        pf.Dijkstra(new int[]{0,0},new int[]{4,5});
+
+        //find the path taken
+        List<int[]> path = pf.Path_reconstruct(new int[]{0,0},new int[]{4,5});
+
+
+
+
+        TestPane testPane = new TestPane(height, testGraph.getCostMapping(),path);
         new Grid(testPane);
 
 
