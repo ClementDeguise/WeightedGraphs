@@ -1,6 +1,8 @@
 package WeightedGraphs;
 
 
+
+import java.nio.channels.InterruptedByTimeoutException;
 import java.util.*;
 
 
@@ -11,17 +13,23 @@ public class PathFinding {
 
     private Map<Vertex,Vertex> cameFrom;
     private Map<Vertex,Integer> costMapping;
+    private TestPane testPane;
 
     private Graph graph;
+    boolean done = false;
+    int delay = 100;
 
 
 
-    PathFinding(Graph graph) {
+    PathFinding(Graph graph, TestPane testPane) {
         this.graph = graph;
         cameFrom = graph.getCameFrom();
         costMapping = graph.getCostMapping();
+        this.testPane = testPane;
 
     }
+
+
 
 
 
@@ -64,6 +72,12 @@ public class PathFinding {
 
 
 
+    boolean getDone() { return done; }
+    void setDelay(int delay) { this.delay = delay; }
+
+
+
+
     /**
      * --------------- Dijkstra algorithm, LOWER COST --------------
      *
@@ -76,7 +90,7 @@ public class PathFinding {
 
     // TODO call a repaint, every time the cameFrom list update
 
-     void Dijkstra(int[] source, int[] goal) {
+     synchronized void Dijkstra(int[] source, int[] goal) {
 
        // Map<Vertex, Vertex> cameFrom = new LinkedHashMap<>(); //each location we visited is linked to the previous one, effectively allowing us to find the path taken
         Map<Vertex, Integer> costSoFar = new LinkedHashMap<>();
@@ -109,7 +123,10 @@ public class PathFinding {
             Vertex topVertex = queue.poll(); // retrieve and remove the head of the queue
 
             //early exit, no need to keep going if we reached the goal
-            if (topVertex.equals(Goal)) break;
+            if (topVertex.equals(Goal)) {
+                done = true;
+                break;
+            }
 
             //System.out.println(topVertex.label + " cost " + topVertex.cost);
             //System.out.println("hashcode : " + topVertex.hashCode());
@@ -117,7 +134,11 @@ public class PathFinding {
 
 
             // for each neighbour of the retrieved vertex
-            for (Vertex v : graph.getNeighbours(topVertex.getCoord())) {
+            //for (Vertex v : graph.getNeighbours(topVertex.getCoord())) {
+            List<Vertex> list = graph.getNeighbours(topVertex.getCoord());
+            for (int i = 0; i < list.size(); i++) {
+
+                Vertex v = list.get(i);
 
                 int newCost = costSoFar.get(topVertex) + costMapping.get(v);            // add cost of current vertex and cost of
 
@@ -130,7 +151,18 @@ public class PathFinding {
 
                     cameFrom.put(v, topVertex);  // add it to the visited list
 
-                    drawGraph();
+
+                    try {
+                        Thread.sleep(delay);
+                        testPane.AddInCameFrom(v);
+                        testPane.repaint();
+                    }
+                    catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        e.printStackTrace();
+                    }
+
+                    //drawGraph();
                     //System.out.println("adding child "+ v.label + " to parent " + topVertex.label );
                     queue.add(v); // add it to the queue as the new frontier, since the frontier expanded
                     // the vertex with lower cost naturally as higher priority
@@ -242,7 +274,20 @@ public class PathFinding {
 
                     cameFrom.put(v, topVertex);  // add it to the visited list
 
-                    drawGraph();
+
+                    try {
+                        Thread.sleep(delay);
+                        testPane.AddInCameFrom(v);
+                        testPane.repaint();
+                    }
+                    catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        e.printStackTrace();
+                    }
+
+
+
+                    //drawGraph();
                     //System.out.println("adding child "+ v.label + " to parent " + topVertex.label );
                     queue.add(v); // add it to the queue as the new frontier, since the frontier expanded
                     // the vertex with lower cost naturally as higher priority
@@ -321,7 +366,18 @@ public class PathFinding {
 
                     cameFrom.put(v, topVertex);  // add it to the visited list
 
-                    drawGraph();
+                    try {
+                        Thread.sleep(delay);
+                        testPane.AddInCameFrom(v);
+                        testPane.repaint();
+                    }
+                    catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        e.printStackTrace();
+                    }
+
+
+                    //drawGraph();
                     //System.out.println("adding child "+ v.label + " to parent " + topVertex.label );
                     queue.add(v); // add it to the queue as the new frontier, since the frontier expanded
                     // the vertex with lower cost naturally as higher priority

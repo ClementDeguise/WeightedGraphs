@@ -3,10 +3,10 @@ package WeightedGraphs;
 import javax.swing.*;
 import java.awt.*;
 
-public class Grid {
+class Grid {
 
 
-    public Grid(TestPane testPane) {
+    Grid(TestPane testPane) {
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -29,6 +29,23 @@ public class Grid {
             }
         });
     }
+
+
+    /*synchronized void paintGraph(PathFinding pf, TestPane testPane, Graph graph) {
+
+        boolean done = pf.getDone();
+        pf.Dijkstra(new int[]{8, 0}, new int[]{3, 8});
+
+        while (!done) {
+
+            testPane.getCameFrom(graph.getCameFrom());
+            testPane.repaint();
+            done = pf.getDone();
+        }
+
+
+    }*/
+
 
 
 }

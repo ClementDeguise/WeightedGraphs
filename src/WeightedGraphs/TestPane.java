@@ -1,10 +1,9 @@
 package WeightedGraphs;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Map;
-import javax.swing.*;
+import java.util.*;
 import java.util.List;
+import javax.swing.*;
 
 
 public class TestPane extends JPanel {
@@ -12,15 +11,38 @@ public class TestPane extends JPanel {
     private int gridSize;
     private Map<Vertex,Integer> costMapping;
     private List<int[]> path;
+    private Set<Vertex> cameFrom = new HashSet<>();
+
+    private int[] source;
+    private int[] goal;
 
 
-    TestPane(int gridSize, Map<Vertex,Integer> costMapping, List<int[]> path) {
+
+    TestPane(int gridSize, Map<Vertex,Integer> costMapping) {
         this.gridSize = gridSize;
         this.costMapping = costMapping;
 
-        this.path = path;
-
     }
+
+
+    void getPath(List<int[]> path) { this.path = path; }
+
+    void AddInCameFrom(Vertex a) {
+        cameFrom.add(a);
+    }
+
+    // get source and goal
+    void setSourceAndGoal(int[] source, int[] goal) {
+        this.source = source;
+        this.goal = goal;
+    }
+
+
+
+
+
+
+
 
 
     @Override
@@ -64,34 +86,98 @@ public class TestPane extends JPanel {
             // vert, horz relative positions
             for (int vert = 0; vert < gridSize; vert++) {
 
+
+                int[] v = new int[]{horz,vert};
+
+
+
                 // draw rectangle
                 g.drawRect(x, y, size, size);
-                //Shape rectangle = new Rectangle(x, y, size, size);
-                //g.setColor(Color.WHITE);
+
+
+
+
                 try {
 
-                    int[] v = new int[]{horz,vert};
+
+                    /** IMPORTANT
+                     *
+                     * Passing the same HashMap cameFrom entirely every time the path finding algorithm visit an element will result
+                     * in concurrency errors. Instead we use a HashSet and pass the single vertex that was just visited to the set, so
+                     * previous values are not overridden.
+                     *
+                     *
+                     * Also the order to which the elements are rendered is important. If we set the cameFrom elements after writing the cost number inside the
+                     * rectangle, the cost will be erased.
+                     * So be careful with the foreground / background filling of your elements. Here we will fill the colors, then overwrite them with the path
+                     * when the path is found, then write the costs, Source and Goal as foreground text, IN LAST.
+                     */
+
+                    // update the visited vertices
+                    if (cameFrom != null) {
+
+                        for (Vertex V : cameFrom) {
+
+                            // if the vertex in cameFrom is the current coord
+                            if (Arrays.equals(V.getCoord(),v)) {
 
 
-                    for (int[] i : path) {
-                        if (Arrays.equals(i,v)) {
-                            //g.drawRect(x+size/4,y+size/4,size/2,size/2);
-                            // g.fillRect(x+size/4,y+size/4,size/2,size/2);
-                            //Rectangle rectangle = new Rectangle(x + size / 4, y + size / 4, size / 2, size / 2);
-
-                            g.setColor(Color.GREEN);
-                            g.fillRect(x+1,y+1,size-1,size-1);
-                            g.setColor(Color.BLACK);
+                                g.setColor(Color.LIGHT_GRAY);
+                                g.fillRect(x + 1, y + 1, size - 1, size - 1);
+                                g.setColor(Color.BLACK);
 
 
-
+                            }
                         }
                     }
 
 
-                    String cost = Integer.toString(costMapping.get(new Vertex(v)));
-                    // draw cost value inside
-                    g.drawString(cost, x+size/2,y+size/2);
+                    //only draw path at the end when it is done
+                    if (path != null) {
+
+                        for (int[] i : path) {
+                            if (Arrays.equals(i, v)) {
+
+
+                                g.setColor(Color.GREEN);
+                                g.fillRect(x + 1, y + 1, size - 1, size - 1);
+                                g.setColor(Color.BLACK);
+
+
+                            }
+                        }
+                    }
+
+
+
+
+                    // draw source and goal
+                    if (source != null && goal != null) {
+
+                        if (Arrays.equals(source,v)) {
+                            g.setColor(Color.PINK);
+                            g.fillRect(x + 1, y + 1, size - 1, size - 1);
+                            g.setColor(Color.BLACK);
+                            g.drawString("S", x+size/2,y+size/2);
+                        }
+
+                        else if (Arrays.equals(goal,v)) {
+                            g.setColor(Color.RED);
+                            g.fillRect(x + 1, y + 1, size - 1, size - 1);
+                            g.setColor(Color.BLACK);
+                            g.drawString("G", x+size/2,y+size/2);
+                        }
+
+                        else {
+                            String cost = Integer.toString(costMapping.get(new Vertex(v)));
+                            // draw cost value inside
+                            g.drawString(cost, x+size/2,y+size/2);
+                        }
+
+
+                    }
+
+
 
 
                 } catch (NullPointerException e) {

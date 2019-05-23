@@ -16,8 +16,8 @@ public class PathFindingGenerator {
 
 
         // set graph height and width
-        int height = 10;
-        int width = 10;
+        int height = 20;
+        int width = 20;
 
 
         // Graph structure with neighbours
@@ -48,26 +48,58 @@ public class PathFindingGenerator {
 
 
 
+        // SOURCE AND GOAL
+        int[] Source = new int[]{2, 2};
+        int[] Goal = new int[]{17, 16};
+
+
+
+
         // --------------------------------
+
+        TestPane testPane = new TestPane(height, testGraph.getCostMapping());
+        Grid grid = new Grid(testPane);
+
+
+
 
 
 
         // pass the graph to the algo
-        PathFinding pf = new PathFinding(testGraph);
+        PathFinding pf = new PathFinding(testGraph, testPane);
 
         //algo
-        //pf.Dijkstra(new int[]{0,0},new int[]{4,5});
-        //pf.GreedyBFS(new int[]{8,0},new int[]{3,8});
-        pf.Astar(new int[]{8,0},new int[]{3,8});
+
+        //grid.paintGraph(pf, testPane, testGraph);
+
+        testPane.setSourceAndGoal(Source,Goal);
+        pf.setDelay(20);
+        //pf.Dijkstra(Source,Goal);
+        //pf.GreedyBFS(Source,Goal);
+        pf.Astar(Source,Goal);
+
+
+        /* boolean done = pf.getDone();
+        while (!done) {
+            pf.Dijkstra(new int[]{8, 0}, new int[]{3, 8});
+            testPane.getCameFrom(testGraph.getCameFrom());
+            pf.notify();
+            done = pf.getDone();
+        }*/
+
+
+
+
+
 
         //find the path taken
-        List<int[]> path = pf.Path_reconstruct(new int[]{8,0},new int[]{3,8});
+        List<int[]> path = pf.Path_reconstruct(Source, Goal);
+        testPane.getPath(path);
+        testPane.repaint();
 
 
 
 
-        TestPane testPane = new TestPane(height, testGraph.getCostMapping(),path);
-        new Grid(testPane);
 
 
 

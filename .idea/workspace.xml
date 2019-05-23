@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="047581e6-3c30-43be-9359-d8137aebb899" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/WeightedGraphs/WeightedGraphs/PathFinding.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/WeightedGraphs/WeightedGraphs/PathFinding.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/WeightedGraphs/WeightedGraphs/PathFindingGenerator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/WeightedGraphs/WeightedGraphs/PathFindingGenerator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/WeightedGraphs/Grid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/WeightedGraphs/Grid.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/WeightedGraphs/PathFinding.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/WeightedGraphs/PathFinding.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/WeightedGraphs/PathFindingGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/WeightedGraphs/PathFindingGenerator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/WeightedGraphs/TestPane.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/WeightedGraphs/TestPane.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,6 +13,9 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageViewManager">
+    <option name="myElementSize" value="241" />
   </component>
   <component name="DefaultGradleProjectSettings">
     <option name="isMigrated" value="true" />
@@ -23,8 +25,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/PathFindingGenerator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="452">
-              <caret line="60" column="58" selection-start-line="60" selection-start-column="58" selection-end-line="60" selection-end-column="58" />
+            <state relative-caret-position="408">
+              <caret line="78" column="8" selection-start-line="78" selection-start-column="8" selection-end-line="78" selection-end-column="8" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -35,8 +37,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/Grid.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="425">
-              <caret line="26" selection-start-line="26" selection-end-line="26" />
+            <state relative-caret-position="928">
+              <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -47,10 +49,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/TestPane.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="892">
-              <caret line="90" selection-start-line="90" selection-end-line="90" />
+            <state relative-caret-position="1904">
+              <caret line="112" column="77" lean-forward="true" selection-start-line="112" selection-start-column="77" selection-end-line="112" selection-end-column="77" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#625#626#0" expanded="true" />
+                <element signature="e#880#881#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -59,7 +63,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/Graph.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1292">
+            <state relative-caret-position="17">
               <caret line="77" column="26" selection-start-line="77" selection-start-column="26" selection-end-line="77" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -79,8 +83,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/PathFinding.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="348">
-              <caret line="45" selection-start-line="45" selection-end-line="45" />
+            <state relative-caret-position="4505">
+              <caret line="274" column="77" selection-start-line="274" selection-start-column="77" selection-end-line="274" selection-end-column="77" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -128,8 +135,8 @@
         <option value="$PROJECT_DIR$/src/WeightedGraphs/Dijkstra.java" />
         <option value="$PROJECT_DIR$/src/WeightedGraphs/Pathfinding.java" />
         <option value="$PROJECT_DIR$/src/WeightedGraphs/Vertex.java" />
-        <option value="$PROJECT_DIR$/src/WeightedGraphs/Grid.java" />
         <option value="$PROJECT_DIR$/src/WeightedGraphs/Graph.java" />
+        <option value="$PROJECT_DIR$/src/WeightedGraphs/Grid.java" />
         <option value="$PROJECT_DIR$/src/WeightedGraphs/TestPane.java" />
         <option value="$PROJECT_DIR$/src/WeightedGraphs/PathFinding.java" />
         <option value="$PROJECT_DIR$/src/WeightedGraphs/PathFindingGenerator.java" />
@@ -274,6 +281,7 @@
       <window_info anchor="bottom" id="Event Log" order="8" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32936078" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.32936078" />
+      <window_info anchor="right" id="Coverage" side_tool="true" weight="0.32995737" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -284,29 +292,23 @@
       <window_info anchor="right" id="Palette&#9;" order="7" />
     </layout>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/WeightedGraphs/PathFinding.java</url>
-          <line>45</line>
-          <properties />
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/WeightedGraphs/PathFinding.java</url>
-          <line>43</line>
-          <properties />
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/WeightedGraphs$PathFindingGenerator.ic" NAME="PathFindingGenerator Coverage Results" MODIFIED="1558633785995" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>WeightedGraphs.*</FILTER>
+    </SUITE>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/Grid.java">
+    <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/CostComparator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        <state relative-caret-position="255">
+          <caret line="15" column="1" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/Vertex.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="18" column="31" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -315,7 +317,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/Graph.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1292">
+        <state relative-caret-position="17">
           <caret line="77" column="26" selection-start-line="77" selection-start-column="26" selection-end-line="77" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -331,44 +333,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/Vertex.java">
+    <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/Grid.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="18" column="31" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
+        <state relative-caret-position="928">
+          <caret line="57" lean-forward="true" selection-start-line="57" selection-end-line="57" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/CostComparator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="1" selection-start-line="15" selection-start-column="1" selection-end-line="15" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/TestPane.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="892">
-          <caret line="90" selection-start-line="90" selection-end-line="90" />
+        <state relative-caret-position="1904">
+          <caret line="112" column="77" lean-forward="true" selection-start-line="112" selection-start-column="77" selection-end-line="112" selection-end-column="77" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#625#626#0" expanded="true" />
+            <element signature="e#880#881#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/PathFinding.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="45" selection-start-line="45" selection-end-line="45" />
+        <state relative-caret-position="4505">
+          <caret line="274" column="77" selection-start-line="274" selection-start-column="77" selection-end-line="274" selection-end-column="77" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/WeightedGraphs/PathFindingGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="452">
-          <caret line="60" column="58" selection-start-line="60" selection-start-column="58" selection-end-line="60" selection-end-column="58" />
+        <state relative-caret-position="408">
+          <caret line="78" column="8" selection-start-line="78" selection-start-column="8" selection-end-line="78" selection-end-column="8" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
