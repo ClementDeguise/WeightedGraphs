@@ -33,15 +33,18 @@ public class PathFindingGenerator {
 
 
         // change some costs
-        testGraph.addCost(3,3,30);
-        testGraph.addCost(3,4,30);
-        testGraph.addCost(3,5,30);
+        testGraph.addCost(2,3,30);
+        testGraph.addCost(2,4,30);
+        testGraph.addCost(2,5,30);
+        testGraph.addCost(2,6,30);
+        testGraph.addCost(7,3,30);
+        testGraph.addCost(7,4,30);
+        testGraph.addCost(7,5,30);
+        testGraph.addCost(7,6,30);
         testGraph.addCost(3,6,30);
-        testGraph.addCost(4,3,30);
-        testGraph.addCost(4,4,30);
         testGraph.addCost(4,6,30);
-        testGraph.addCost(5,3,30);
-        testGraph.addCost(6,3,30);
+        testGraph.addCost(5,6,30);
+        testGraph.addCost(6,6,30);
 
 
 
@@ -53,10 +56,12 @@ public class PathFindingGenerator {
         PathFinding pf = new PathFinding(testGraph);
 
         //algo
-        pf.Dijkstra(new int[]{0,0},new int[]{4,5});
+        //pf.Dijkstra(new int[]{0,0},new int[]{4,5});
+        //pf.GreedyBFS(new int[]{8,0},new int[]{3,8});
+        pf.Astar(new int[]{8,0},new int[]{3,8});
 
         //find the path taken
-        List<int[]> path = pf.Path_reconstruct(new int[]{0,0},new int[]{4,5});
+        List<int[]> path = pf.Path_reconstruct(new int[]{8,0},new int[]{3,8});
 
 
 
